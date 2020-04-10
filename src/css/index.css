@@ -1,0 +1,44 @@
+.campo{
+    margin-top: 10px;
+    height: 100px;
+    width: 100%;
+    background: red;
+    display: flex;
+    align-items: center;
+}
+.imagen{
+    height: 100%;
+    width: 100px;
+}
+.Jason{
+    background-image: url("../assets/jason.jpg");
+}
+.Lars{
+    background-image: url("../assets/Lars.png");
+}
+.Whammet{
+    background-image: url("../assets/whammet.png");
+}
+.Mustaine{
+    background-image: url("../assets/Mustaine.png");
+}
+.texto{
+    height: 100%;
+    width: 100%;
+    background: black;
+}
+.chat{
+    width: 1000px;
+    background: green;
+}
+.video{
+    height: 700px;
+    width: 300px;
+    background: greenyellow;
+}
+
+iframe{
+
+    height: 200px;
+    width: 200px;
+}

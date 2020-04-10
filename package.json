@@ -1,0 +1,19 @@
+{
+  "name": "practica8",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ULL-ESIT-DSI-1920/dsi-p3-synth-kenshinsamue.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ULL-ESIT-DSI-1920/dsi-p3-synth-kenshinsamue/issues"
+  },
+  "homepage": "https://github.com/ULL-ESIT-DSI-1920/dsi-p3-synth-kenshinsamue#readme"
+}
