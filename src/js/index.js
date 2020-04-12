@@ -1,41 +1,57 @@
+import conversation from './conversation.js';
 import profile from './perfil.js';
 
-const a = {nombre: "Lars",
-        lang:"en",
-        rate:2.0,
-        pitch:1.0,
-        colour:"#000000"
-};
 
 
+const boton = document.getElementById("boton").onclick = function (){
+
+document.getElementById("boton").classList.add("ocultar");
+document.getElementById("conv").classList.remove("ocultar");
+const lars = new profile("Lars","en",1.0,1.5,"#000000");
+const kirk = new profile("Whammet","en",1.0,1.0,"#000000");
+const jason = new profile("Jason","en",1.0,1.0,"#000000");
+const dave = new profile("Mustaine","en",1.0,1.0,"#000000");
+
+const chat = [
+    {   author: "Lars",
+        message: "Seriously! This is the fucking sandbox." },
+
+    {   author: "Whammet",
+        message: "Well, he´s wounded"   },
+
+    {   author: "Lars",
+        message: "huh?"     },
+        
+    {   author: "Whammet",
+        message: "he´s wounde. yeah, but you know its up to him to mend himself"     },
+    
+    {   author: "Whammet",
+        message:"and we´re giving him every opportunity.."      },
+
+    {   author: "Lars",
+        message: "He fucking left the band!, He fucking left the band!"     },
+    
+    {   author: "Lars",
+        message: "I mean, period! Exclamation point!"},
+
+    {   author: "Jason",
+        message: "No way!"},
+
+    {   author: "Mustaine",
+        message: "Oh,you too ?. Wanna hang up in a concert with us ?"}
+];
+
+const usuarios = {
+    Lars : lars,
+    Whammet: kirk,
+    Jason: jason,
+    Dave : dave
+}
+const conv = new conversation(chat,usuarios);
+
+conv.construirChat();
 
 
+document.getElementById("video").classList.remove("ocultar");
+}
 
-
-const b = new profile(a);
-
-console.log(b.nombre);
-
-/*const manzProfile = new Profile("Manz", {               // creamos una clase que contendra el avatar, y representa a un usuario
-    lang: "es",
-    rate: 2.0,
-    pitch: 1.0,
-    color: "#ff0000",
-  });
-
-
-
-
-
-const conversation = new Conversation(box);
-
-conversation.addMessage([
-  { author: manzProfile, text: "¡Hola a todos! ¿Qué tal están?" },
-  { author: robotProfile, text: "Muy bien, ¡gracias!" },
-  { author: breadmanProfile, text: "Yo también muy bien" },
-  {
-    author: manzProfile,
-    text: "El robot habla con un acento un tanto raro...",
-  },
-  { author: robotProfile, text: "Es que soy del norte" },
-]);*/

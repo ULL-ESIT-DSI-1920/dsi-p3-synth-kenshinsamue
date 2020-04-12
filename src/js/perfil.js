@@ -1,19 +1,29 @@
 class profile{
-    constructor(perfil){
+    constructor(nombre,idioma,rate,tono,color){
 
-        this._nombre = perfil["nombre"];
-        this._lenguaje =perfil["lang"];
-        this._tono = perfil["pitch"];
-        this._color = perfil["colour"]; 
+        this._nombre = nombre;
+        this._lenguaje =idioma;
+        this._rate = rate;
+        this._tono = tono;
+        this._color = color; 
     }
 
-     mostrar(){
-        console.log(this._nombre);
 
-    }
     get nombre(){
         return this._nombre;
     }
+    get lenguaje(){
+        return this._lenguaje; 
+    }
+    get rate(){
+        return this._rate;
+    }
+    get tono(){
+        return this._tono;
+    }
 
+    get color(){
+        return this._color;
+    }
 };
 export default profile;

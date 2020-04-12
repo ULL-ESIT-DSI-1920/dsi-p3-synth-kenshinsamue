@@ -5,6 +5,14 @@
     background: red;
     display: flex;
     align-items: center;
+    
+}
+.ocultar{
+    visibility: hidden;
+}
+.blanco{
+    color: white;
+
 }
 .imagen{
     height: 100%;
@@ -28,17 +36,14 @@
     background: black;
 }
 .chat{
+    float: left;
     width: 1000px;
-    background: green;
-}
-.video{
-    height: 700px;
-    width: 300px;
-    background: greenyellow;
+ 
 }
 
 iframe{
-
-    height: 200px;
-    width: 200px;
+    margin-top :8px;
+    float:right;
+    height: 300px;
+    width: 450px;
 }
