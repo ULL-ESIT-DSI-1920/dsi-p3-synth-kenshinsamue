@@ -2,15 +2,14 @@ import conversation from './conversation.js';
 import profile from './perfil.js';
 
 
-
-const boton = document.getElementById("boton").onclick = function (){
+document.getElementById("boton").onclick = function (){
 
 document.getElementById("boton").classList.add("ocultar");
 document.getElementById("conv").classList.remove("ocultar");
-const lars = new profile("Lars","en",1.0,1.5,"#000000");
-const kirk = new profile("Whammet","en",1.0,1.0,"#000000");
-const jason = new profile("Jason","en",1.0,1.0,"#000000");
-const dave = new profile("Mustaine","en",1.0,1.0,"#000000");
+const lars = new profile("Lars","en",1.0,1.5,"rojo");
+const kirk = new profile("Whammet","en",1.0,1.0,"amarillo");
+const jason = new profile("Jason","en",1.0,1.0,"verde");
+const dave = new profile("Mustaine","en",1.0,1.0,"blanco");
 
 const chat = [
     {   author: "Lars",
@@ -45,7 +44,7 @@ const usuarios = {
     Lars : lars,
     Whammet: kirk,
     Jason: jason,
-    Dave : dave
+    Mustaine : dave
 }
 const conv = new conversation(chat,usuarios);
 

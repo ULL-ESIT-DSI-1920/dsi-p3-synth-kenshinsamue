@@ -5,14 +5,21 @@
     background: red;
     display: flex;
     align-items: center;
-    
 }
 .ocultar{
     visibility: hidden;
 }
 .blanco{
     color: white;
-
+}
+.rojo{
+    color:red;
+}
+.amarillo{
+    color:yellow;
+}
+.verde{
+    color: green;
 }
 .imagen{
     height: 100%;
@@ -38,9 +45,7 @@
 .chat{
     float: left;
     width: 1000px;
- 
 }
-
 iframe{
     margin-top :8px;
     float:right;

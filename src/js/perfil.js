@@ -5,10 +5,8 @@ class profile{
         this._lenguaje =idioma;
         this._rate = rate;
         this._tono = tono;
-        this._color = color; 
+        this._color= color;
     }
-
-
     get nombre(){
         return this._nombre;
     }
