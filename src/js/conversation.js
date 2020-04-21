@@ -29,9 +29,24 @@ class Conversation{
     div.appendChild(text);
     text.appendChild(a);
     padre.appendChild(div);
-    //this.normal(info,a);
-    //this.wordByWord(info,a);
-    this.letterToLetter(info,a);
+
+    var opcion = document.getElementById("boton").childNodes[1];
+
+ 
+    if(opcion[0].checked == true){
+
+      this.normal(info,a);
+    }
+
+    else{
+
+      if(opcion[1].checked ==true){
+        this.wordByWord(info,a);
+      }
+        else{
+          this.letterToLetter(info,a);
+        }
+    }
   }
 
   normal(informacion,text){

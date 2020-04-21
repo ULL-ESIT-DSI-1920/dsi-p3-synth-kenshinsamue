@@ -2,7 +2,7 @@ import Conversation from './conversation.js';
 import Profile from './perfil.js';
 
 
-document.getElementById("boton").onclick = function (){
+document.getElementById("enviar").onclick = function (){
 
   document.getElementById("boton").classList.add("ocultar");
   document.getElementById("conv").classList.remove("ocultar");
