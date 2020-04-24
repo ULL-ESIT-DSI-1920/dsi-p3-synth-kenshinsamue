@@ -14,7 +14,20 @@ class Conversation{
       this.crearDialogo(this._chat[cosas],elementoPadre);
     }
   }
+/*if(opcion[0].checked == true){
 
+      this.normal(info,a);
+    }
+
+    else{
+
+      if(opcion[1].checked ==true){
+        this.wordByWord(info,a);
+      }
+        else{
+          this.letterToLetter(info,a);
+        }
+    }*/
   crearDialogo(info,padre){
     var div = document.createElement('div');
     var img = document.createElement('div');
@@ -31,46 +44,12 @@ class Conversation{
     padre.appendChild(div);
 
     var opcion = document.getElementById("boton").childNodes[1];
-
- 
-    if(opcion[0].checked == true){
-
-      this.normal(info,a);
-    }
-
-    else{
-
-      if(opcion[1].checked ==true){
-        this.wordByWord(info,a);
-      }
-        else{
-          this.letterToLetter(info,a);
-        }
-    }
+    
+    this.configurarSynth(this._users[info.author],info.message,a);
   }
+/*
 
-  normal(informacion,text){
-    this.configurarSynth(this._users[informacion.author],informacion.message, text);
-  }
-
-  wordByWord(informacion,text){
-    const dialogo = informacion.message.split(" ");
-    var i; var palabra;
-    for(i=0;i<dialogo.length;i++){
-      palabra = dialogo[i]+" ";
-      this.configurarSynth(this._users[informacion.author], palabra, text);
-    }
-  }
-
-  configurarSynth(perfil,guion,campo){
-    const msg  = new SpeechSynthesisUtterance();
-    msg.lang = perfil.lenguaje;
-    msg.text = guion;
-    msg.rate= perfil.rate;
-    msg.volume =0.4;
-    msg.pitch = perfil.tono;
-    msg.onstart = ()=>{
-      if(campo.childNodes.length === 0){
+if(campo.childNodes.length === 0){
         var texto = document.createTextNode(guion);
         campo.appendChild(texto);
         campo.parentNode.parentNode.classList.remove("ocultar");
@@ -79,8 +58,30 @@ class Conversation{
       else{
         campo.childNodes[0].data= campo.childNodes[0].data+guion; 
       }
+*/ 
+  configurarSynth(perfil,guion,campo){    /// guion palabras no frases 
+    const msg  = new SpeechSynthesisUtterance();
+    msg.lang = perfil.lenguaje;
+    msg.text = guion;
+    msg.rate= perfil.rate;
+    msg.volume =0.4;
+    msg.pitch = perfil.tono;
+
+    msg.onboundary = (event)=>{
+
+      palabra = event.utterance.text.substring(event.charIndex, event.charLength);      
+      console.log(palabra);
     };
+
+
     speechSynthesis.speak(msg);
+  }
+
+
+  wordByWord(informacion,text){
+
+    this.configurarSynth(this._users[informacion.author],informacion.message, text);
+
   }
 
   letterToLetter(informacion,text){
