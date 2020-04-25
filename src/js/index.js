@@ -22,7 +22,7 @@ document.getElementById("enviar").onclick = function (){
       message: "huh?"     },
         
     {   author: "Whammet",
-      message: "he´s wounde. yeah, but you know its up to him to mend himself"     },
+      message: "he´s wounded. yeah, but you know its up to him to mend himself"     },
     
     {   author: "Whammet",
       message:"and we´re giving him every opportunity.."      },

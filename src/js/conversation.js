@@ -14,20 +14,7 @@ class Conversation{
       this.crearDialogo(this._chat[cosas],elementoPadre);
     }
   }
-/*if(opcion[0].checked == true){
 
-      this.normal(info,a);
-    }
-
-    else{
-
-      if(opcion[1].checked ==true){
-        this.wordByWord(info,a);
-      }
-        else{
-          this.letterToLetter(info,a);
-        }
-    }*/
   crearDialogo(info,padre){
     var div = document.createElement('div');
     var img = document.createElement('div');
@@ -45,21 +32,11 @@ class Conversation{
 
     var opcion = document.getElementById("boton").childNodes[1];
     
-    this.configurarSynth(this._users[info.author],info.message,a);
+    this.configurarSynth(this._users[info.author],info.message,a,opcion);
   }
-/*
 
-if(campo.childNodes.length === 0){
-        var texto = document.createTextNode(guion);
-        campo.appendChild(texto);
-        campo.parentNode.parentNode.classList.remove("ocultar");
-        campo.classList.add(perfil.color);
-      }
-      else{
-        campo.childNodes[0].data= campo.childNodes[0].data+guion; 
-      }
-*/ 
-  configurarSynth(perfil,guion,campo){    /// guion palabras no frases 
+  configurarSynth(perfil,guion,campo,opcion){    
+
     const msg  = new SpeechSynthesisUtterance();
     msg.lang = perfil.lenguaje;
     msg.text = guion;
@@ -69,28 +46,81 @@ if(campo.childNodes.length === 0){
 
     msg.onboundary = (event)=>{
 
-      palabra = event.utterance.text.substring(event.charIndex, event.charLength);      
-      console.log(palabra);
+      if(opcion[0].checked == true){
+        if(event.name == "sentence"){
+          const palabra = msg.text; 
+          this.completo(palabra,perfil,campo);
+        }
+        
+      }
+  
+      else{
+  
+        if(opcion[1].checked ==true){
+         
+          if (event.name === "word") {
+            const start = event.charIndex;
+            const end = start+ event.charLength;
+            const palabra = msg.text.substring(start,end)+" ";
+            this.wordByWord(palabra,perfil,campo);
+          }
+        }
+          else{
+            if (event.name === "word") {
+              const start = event.charIndex;
+              const end = start+ event.charLength;
+              const palabra = msg.text.substring(start,end)+" ";
+              this.letterToLetter(palabra,perfil,campo);
+            }
+         }
+      }
     };
-
-
     speechSynthesis.speak(msg);
   }
 
-
-  wordByWord(informacion,text){
-
-    this.configurarSynth(this._users[informacion.author],informacion.message, text);
-
+  completo(guion,perfil,campo){
+    if(campo.childNodes.length === 0){
+      var texto = document.createTextNode(guion);
+      campo.appendChild(texto);
+      campo.parentNode.parentNode.classList.remove("ocultar");
+      campo.classList.add(perfil.color);
+    }
   }
 
-  letterToLetter(informacion,text){
-    const dialogo = informacion.message.split(" ");
-    var i; var palabra;
-    for(i=0;i<dialogo.length;i++){
-      palabra = dialogo[i]+" ";
-      this.sinthLetter(this._users[informacion.author], palabra, text);
+  wordByWord(guion,perfil,campo){
+    if(campo.childNodes.length === 0){
+      var texto = document.createTextNode(guion);
+      campo.appendChild(texto);
+      campo.parentNode.parentNode.classList.remove("ocultar");
+      campo.classList.add(perfil.color);
     }
+    else{
+      campo.childNodes[0].data= campo.childNodes[0].data+guion; 
+    }
+  }
+
+  letterToLetter(guion,perfil,campo){
+
+    var j =0;
+
+    var interval = setInterval(() => {
+      if(campo.childNodes.length === 0){
+        var texto = document.createTextNode(guion.charAt(j));
+        campo.appendChild(texto);
+        campo.parentNode.parentNode.classList.remove("ocultar");
+        campo.classList.add(perfil.color);
+        j++;          
+      }
+      else{
+        campo.childNodes[0].data= campo.childNodes[0].data+guion.charAt(j);
+        j++;
+      }
+      if (j > guion.length){
+        clearInterval(interval);
+      }
+
+    }, 20);
+
   }
 
   sinthLetter(perfil,guion,campo){
