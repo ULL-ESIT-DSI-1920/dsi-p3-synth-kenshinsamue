@@ -24,21 +24,33 @@ e `index.css`. Estos ficheros contendran los scripts y los estilos de la pagina 
 	  <script defer src="./js/index.js"></script>
 	</head>
 
-Por otro lado nos encontramos el `body` que contendra dos etiquetas `div`, la primera sera un boton que usaremos para empezar el "dialogo" al presionarlo. El
-segundo representa el chat en general, ademas de un video enlazado de youtube.
+Por otro lado dentro de `body`nos encontramos dos `div`que contendran, el primero el formulario para preguntar la modalidad en la que se 
+mostrara el texto, y el segundo que servira como contenedor del chat en si junto con un video contextual.
 
 
 	<body>
-	    <div id="boton">
-	        <button>empezar</button>
-	    </div>
-	    <div class="ocultar" id="conv">
-	        <div class="chat" id="chat">
-	        </div>
-	        <iframe  class="ocultar" id="video"
-	            src="https://www.youtube.com/embed/kj_8E3FOU4s">
-	        </iframe> 
-	    </div>
+
+    <div id="boton">
+        <form>
+            <input type="radio" id="frase" name="opcion" value="frase">
+            <label for="frase">Frase entera</label><br>
+
+            <input type="radio" id="palabra" name="opcion" value="palabra">
+            <label for="female">Palabra a palabra</label><br>
+
+            <input type="radio" id="letra" name="opcion" value="letra">
+            <label for="other">Letra a letra</label><br><br>
+
+            <button id="enviar" type="button">listo</button>
+          </form> 
+    </div>
+    <div class="ocultar" id="conv">
+        <div class="chat" id="chat">
+        </div>
+        <iframe  class="ocultar" id="video"
+            src="https://www.youtube.com/embed/kj_8E3FOU4s">
+        </iframe> 
+    </div>
 	   
 	</body>
 
@@ -156,7 +168,8 @@ Para empezar, tenemos `perfil` que lo describimos de la siguiente forma:
 	    }
 	};
 
-Como vemos consta simplemente de un constructor, que se limita a obtener los datos por parametros, y los guarda en atributos para poder ser usados en getters.
+Como vemos consta simplemente de un constructor, que se limita a obtener los datos por parametros, y los guarda en atributos para poder ser 
+usados en getters.
 
 Por otro lado tenemos `Conversation`, que es un poco mas compleja, por lo que iremos metodo a metodo:
 
@@ -165,8 +178,8 @@ Por otro lado tenemos `Conversation`, que es un poco mas compleja, por lo que ir
         this._users=users;
     }
 
-Nada mas empezar nos encontramos con el constructor, que como vemos guarda como atributo el hash con las conversaciones y otro hash con los objeto `perfil` de
-cada usuario. 
+Nada mas empezar nos encontramos con el constructor, que como vemos guarda como atributo el hash con las conversaciones y otro hash con los 
+objeto `perfil` de cada usuario. 
 
 Posteriormente tenemos el metodo `construirChat`:
 
@@ -179,93 +192,159 @@ Posteriormente tenemos el metodo `construirChat`:
         }
     }
 
-Este metodo se usa para construir de forma dinamica los diferentes `div` que contendran los dialogos e imagenes, de forma que por cada elemento dentro del 
-hash que contiene el chat se creara un nuevo. Esto se hace llamando al metodo `crearDialogo` que se le pasara como parametros el perfil del usuario al que 
-corresponde el dialogo y el elemento padre del dialogo dentro del `DOM`.
+Este metodo se usa para construir de forma dinamica los diferentes `div` que contendran los dialogos e imagenes, de forma que por cada elemento 
+dentro del  hash que contiene el chat se creara un nuevo. Esto se hace llamando al metodo `crearDialogo` que se le pasara como parametros el 
+perfil del usuario al que corresponde el dialogo y el elemento padre del dialogo dentro del `DOM`.
 
-Como vemos en las primeras instrucciones, crearemos los diferentes elementos de forma separada, 3 `div`, uno para contenerlo todo, otro para la imagen y el 
-ultimo para el texto, y 1 elemento con etiqueta `<a>`:
+Como vemos en las primeras instrucciones, crearemos los diferentes elementos de forma separada, 3 `div`, uno para contenerlo todo, otro para la 
+imagen y el ultimo para el texto, y 1 elemento con etiqueta `<a>`:
 
-        var div = document.createElement('div');
-        var img = document.createElement('div');
-        var text =document.createElement('div');
-        var a = document.createElement("a");
+    var div = document.createElement('div');
+    var img = document.createElement('div');
+    var text =document.createElement('div');
+    var a = document.createElement("a");
 
 Lo siguiente que se hace es asignar las diferentes clases segun corresponda a cada elemento: 
 
-	    div.classList.add("campo");
-        div.classList.add("ocultar");
-        img.classList.add("imagen");
-        img.classList.add(info["author"])
-        text.classList.add("texto");
+    div.classList.add("campo");
+    div.classList.add("ocultar");
+    img.classList.add("imagen");
+    img.classList.add(info["author"])
+    text.classList.add("texto");
 
 Lo que haremos despues, sera unir los diferentes elementos respetando la jerarquia explicada anteriormente: 
 
-        div.appendChild(img);
-        div.appendChild(text);
-        text.appendChild(a);
-        padre.appendChild(div);
+    div.appendChild(img);
+    div.appendChild(text);
+    text.appendChild(a);
+    padre.appendChild(div);
 
-Por ultimo tenemos una llamada a los metodos encargados de escribir los dialogos, ademas de mostrarlos segun se estipula en la practica
-1. Todo el dialogo completo
-2. Palabra por palabra
-3. Letra por letra
+Por ultimo haremos una llamada al metodo `configurarSynth` que como su nombre indica, configurara el sintentizador con la informacion que 
+disponemos y ejecutara la forma correcta de mostrar el dialogo.
 
-        this.normal(info,a);
-        //this.wordByWord(info,a);
-        //this.letterToLetter(info,a);
 
-En este caso tenenmos descomentado el formato "normal". Con el llamamos al metodo `normal`, valga la redundancia, que recibira por parametro el perfil del 
-usuario y el campo `<a>` creado anteriormente. Este metodo como podremos ver simplemente arregla las cosas para llamar a otro metodo que se encarga de la 
-configuracion del sintetizador asi como mostrar todos los datos que tenemos:
+	configurarSynth(perfil,guion,campo,opcion){    
+		const msg  = new SpeechSynthesisUtterance();
+		msg.lang = perfil.lenguaje;
+		msg.text = guion;
+		msg.rate= perfil.rate;
+		msg.volume =0.4;
+		msg.pitch = perfil.tono;
+		msg.onboundary = (event)=>{
+		if(opcion[0].checked == true){
+			if(event.name == "sentence"){
+			const palabra = msg.text; 
+			this.completo(palabra,perfil,campo);
+			}
+		}
+		else{
+			if (event.name === "word") {
+			const start = event.charIndex;
+			const end = start+ event.charLength;
+			const palabra = msg.text.substring(start,end)+" ";
+			if(opcion[1].checked ==true){
+				this.wordByWord(palabra,perfil,campo);
+			}
+			if(opcion[2].checked ==true){
+				this.letterToLetter(palabra,perfil,campo);
+			}
+			}
+		}
+		};
+		speechSynthesis.speak(msg);
+	}
 
-	normal(informacion,text){
-        this.configurar_synth(this._users[informacion["author"]],informacion["message"], text);
+
+Como podemos ver, `configurarSynth` consta de dos "partes", la primera que se encarga como tal de cargar la configuracion: 
+
+	const msg  = new SpeechSynthesisUtterance();
+	msg.lang = perfil.lenguaje;
+	msg.text = guion;
+	msg.rate= perfil.rate;
+	msg.volume =0.4;
+	msg.pitch = perfil.tono;
+
+Y en la segunda ya trabajamos con el evento `onboundary`, en el que ademas, ya ejecutamos cierto codigo segun la opcion que se haya elegido 
+para mostrar el texto
+	
+
+	if(opcion[0].checked == true){
+			if(event.name == "sentence"){
+			const palabra = msg.text; 
+			this.completo(palabra,perfil,campo);
+			}
+		}
+		else{
+			if (event.name === "word") {
+			const start = event.charIndex;
+			const end = start+ event.charLength;
+			const palabra = msg.text.substring(start,end)+" ";
+			if(opcion[1].checked ==true){
+				this.wordByWord(palabra,perfil,campo);
+			}
+			if(opcion[2].checked ==true){
+				this.letterToLetter(palabra,perfil,campo);
+			}
+			}
+		}
+		};
+
+
+En la primera opcion como vemos, se mostrara todo el dialogo de una vez. Lo cual nos llevara al metodo `completo`: 
+
+	completo(guion,perfil,campo){
+		if(campo.childNodes.length === 0){
+		var texto = document.createTextNode(guion);
+		campo.appendChild(texto);
+		campo.parentNode.parentNode.classList.remove("ocultar");
+		campo.classList.add(perfil.color);
+		}
+	}
+
+Como vemos, simplemente agrega la informacion `html` correspondiente y aplica los estilos necesarios para que se muestre el chat.
+
+
+
+Con la segunda opcion se hace algo relativamente parecido:
+
+
+    wordByWord(guion,perfil,campo){
+	    if(campo.childNodes.length === 0){
+	      var texto = document.createTextNode(guion);
+	      campo.appendChild(texto);
+	      campo.parentNode.parentNode.classList.remove("ocultar");
+	      campo.classList.add(perfil.color);
+	    }
+	    else{
+	      campo.childNodes[0].data= campo.childNodes[0].data+guion; 
+	    }
     }
 
-Antes de continuar con el metodo, es necesario explicar el metodo tambien `wordByWord`. Que recibe los mismos parametros, y en general hace lo mismo que 
-`normal`, la diferencia que encontraremos sera que usaremos un bucle para dividir las palabras por espacios, y esto es lo que le pasaremos al metodo 
-`configurar_synth`, en vez del dialogo completo:
+Con la opcion `wordToWord` hacemos lo mismo que en `completo`, pero con la diferencia que agregamos un condicional `else`, ya que el `if`funcionara para cuando sea la primera palabra de la frase, mientras que el `else` sirve para el resto.
 
-    wordByWord(informacion,text){
-        const dialogo = informacion["message"].split(" ");
-        var i; var palabra;
-        for(i=0;i<dialogo.length;i++){
-            palabra = dialogo[i]+" ";
-            this.configurar_synth(this._users[informacion["author"]], palabra, text);
-        }
+Por ultimo tenemos `letterToLetter` que mostrara el texto mostrando letra a letra con una breve pausa entre cada una: 
+
+    letterToLetter(guion,perfil,campo){
+	    var j =0;
+	    var interval = setInterval(() => {
+	      if(campo.childNodes.length === 0){
+	        var texto = document.createTextNode(guion.charAt(j));
+	        campo.appendChild(texto);
+	        campo.parentNode.parentNode.classList.remove("ocultar");
+	        campo.classList.add(perfil.color);
+	        j++;          
+	      }
+	      else{
+	        campo.childNodes[0].data= campo.childNodes[0].data+guion.charAt(j);
+	        j++;
+	      }
+	      if (j > guion.length){
+	        clearInterval(interval);
+	      }
+	    }, 20);
     }
 
-Ahora si, explicaremos el metodo `configurar_synth`, que vemos, como se dijo antes, recibira el perfil del usuario, el texto que se va a insertar y el 
-elemento `<a>` que venimos arrastrando desde hace rato. Lo primero que hacemos dentro del metodo es configurar las opciones del sintetizador, extrayendo los mismos de los atributos del perfil:
-
-	    const msg  = new SpeechSynthesisUtterance();
-        msg.lang = perfil.lenguaje;
-        msg.text = guion;
-        msg.rate= perfil.rate;
-        msg.volume =0.4;
-        msg.pitch = perfil.tono;
-
-Ahora bien, nos encontramos con que si mandamos a ejecutar esto nos encontraremos que el programa principal se ejecutara todo de una vez, mientras que 
-el sintetizador va extrayendo de un buffer propio los diferentes dialogos almacenados, como este no es el comportamiento que deseamos, usaremos un evento 
-`onstart` que sera el encargado de crear, en caso de que no exista, un campo de texto, asignarle el contenido dentro de la variable `guion` y hacer que el
-dialogo sea visible, en caso contrario simplemente concatena el contenido de `guion` al texto actual dentro de la etiqueta `<a>`:
-
-        msg.onstart = ()=>{
-        if(campo.childNodes.length == 0){
-            var texto = document.createTextNode(guion);
-            campo.appendChild(texto);
-            campo.parentNode.parentNode.classList.remove("ocultar");
-            campo.classList.add(perfil.color);
-        }
-        else{
-            campo.childNodes[0].data= campo.childNodes[0].data+guion; 
-        }
-    }
-
-Por ultimo tenemos la carga al sintetizador de todo lo que hemos configurado:
-
-    speechSynthesis.speak(msg);
+Como vemos, hacemos uso del metodo `setInterval`, que nos ayudara a iterar sobre la cadena en periodos regulares de tiempo para mostrar nuestro texto tal y como queremos, de resto es el mismo tratamiento que en `wordToWord`.
 
 Bien, como se podra ver, hemos cubierto el formato normal y el de palabra por palabra. El caso de letra por letra es diferente con lo que requeriremos de crear otros dos metodos aparte:
 
@@ -281,36 +360,6 @@ la diferencia que llamara al metodo `sinth_letter`  en vez de `configurar_synth`
         }
     }
 
-En `sinth_letter` vemos que el comportamiento es parecido al de `configurar_synth`. La principal diferencia es que toda la configuracion se asigna dentro de un bucle for, que iterara una vez por cada letra de la palabra cargada en `guion`, y veremos que de resto se comporta de forma igual:
-
-
-    sinth_letter(perfil,guion,campo){
-        var i;
-        var msg;
-        var j = 0;
-        for(i =0; i<guion.length;i++){
-            msg  = new SpeechSynthesisUtterance();
-            msg.lang = perfil.lenguaje;
-            msg.rate= perfil.rate;
-            msg.volume =0.4;
-            msg.pitch = perfil.tono;
-            msg.onstart = ()=>{
-                if(campo.childNodes.length == 0){
-                    var texto = document.createTextNode(guion.charAt(j));
-                    campo.appendChild(texto);
-                    campo.parentNode.parentNode.classList.remove("ocultar");
-                    campo.classList.add(perfil.color);
-                    j++;
-                }
-                else{
-                    campo.childNodes[0].data= campo.childNodes[0].data+guion.charAt(j);
-                    j++; 
-                }
-            }
-            msg.text = guion.charAt(i);
-            speechSynthesis.speak(msg);
-        }
-    }
 
 Con esto dariamos por terminado las clases en JavaScript, ahora bien, dentro del fichero `index.js` nos encontraremos con lo siguiente:
 
@@ -319,7 +368,7 @@ ejecucion de un conjunto de instrucciones.
 
 1. ocultar el boton:
 
-        document.getElementById("boton").classList.add("ocultar");
+    	document.getElementById("boton").classList.add("ocultar");
 
 2. Mostrar el `div` del chat: 
 
